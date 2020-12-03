@@ -4,7 +4,8 @@
   "description": "Advent of code 2020 - With Javascript",
   "main": "index.js",
   "scripts": {
-    "day01": "ts-node ./days/day01/index"
+    "day01": "ts-node ./days/day01/index",
+    "day02": "ts-node ./days/day02/index"
   },
   "author": "",
   "license": "ISC",
