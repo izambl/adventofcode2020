@@ -9,7 +9,8 @@
     "day03": "ts-node ./days/day03/index",
     "day04": "ts-node ./days/day04/index",
     "day05": "ts-node ./days/day05/index",
-    "day06": "ts-node ./days/day06/index"
+    "day06": "ts-node ./days/day06/index",
+    "day07": "ts-node ./days/day07/index"
   },
   "author": "",
   "license": "ISC",
