@@ -1,11 +1,11 @@
-import { readInput } from '../../common'
+import { readInput } from '../../common';
 
-interface Mentions { [index: number]: [number, [number, number]] };
+type Mention = [number, [number, number]];
 
 const input = readInput(`${__dirname}/input`)[0].split(',').map(Number);
 
 function part0102(endTurn = 2020): number {
-  const lastMentions: Mentions = {};
+  const lastMentions: Mention[] = [];
   let lastNumberSpoken: number = null;
   let turn = 1;
 
@@ -15,14 +15,12 @@ function part0102(endTurn = 2020): number {
     turn++;
   }
 
-  while(true) {
-    if (lastMentions[lastNumberSpoken][0] === 1) {
-      lastNumberSpoken = 0;
-    } else {
-      const [, [nextToLastTurn, lastTurn]] = lastMentions[lastNumberSpoken];
-      lastNumberSpoken = lastTurn - nextToLastTurn;
-    }
-    addMention(lastNumberSpoken, turn, lastMentions);    
+  while (true) {
+    const [numberOfMentions, [nextToLastTurn, lastTurn]] = lastMentions[lastNumberSpoken];
+
+    lastNumberSpoken = (numberOfMentions === 1) ? 0 : lastTurn - nextToLastTurn;
+
+    addMention(lastNumberSpoken, turn, lastMentions);
 
     if (turn === endTurn) break;
 
@@ -32,13 +30,13 @@ function part0102(endTurn = 2020): number {
   return lastNumberSpoken;
 }
 
-function addMention(lastNumberSpoken: number, turn: number, lastMentions: Mentions): void {
-  if (!lastMentions[lastNumberSpoken]) {
-    lastMentions[lastNumberSpoken] = [1, [null, turn]];
+function addMention(number: number, turn: number, mentions: Mention[]): void {
+  if (!mentions[number]) {
+    mentions[number] = [1, [null, turn]];
   } else {
-    const [numberOfMentions, [, lastTurn]] = lastMentions[lastNumberSpoken];
+    const [numberOfMentions, [, lastTurn]] = mentions[number];
 
-    lastMentions[lastNumberSpoken] = [numberOfMentions + 1, [lastTurn, turn]];
+    mentions[number] = [numberOfMentions + 1, [lastTurn, turn]];
   }
 }
 
