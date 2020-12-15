@@ -4,30 +4,29 @@ interface Mentions { [index: number]: [number, [number, number]] };
 
 const input = readInput(`${__dirname}/input`)[0].split(',').map(Number);
 
-function part0102(lastTurn = 2020): number {
+function part0102(endTurn = 2020): number {
   const lastMentions: Mentions = {};
-  let lastNumberSpoken = null;
+  let lastNumberSpoken: number = null;
   let turn = 1;
 
   for (let i = 0; i < input.length; i++) {    
     lastNumberSpoken = input[i];
     addMention(lastNumberSpoken, turn, lastMentions);
-
     turn++;
   }
 
-  while (turn < (lastTurn + 1)) {
+  while(true) {
     if (lastMentions[lastNumberSpoken][0] === 1) {
-      input[turn] = 0;
-    } else {      
+      lastNumberSpoken = 0;
+    } else {
       const [, [nextToLastTurn, lastTurn]] = lastMentions[lastNumberSpoken];
-
-      input[turn] = lastTurn - nextToLastTurn;
+      lastNumberSpoken = lastTurn - nextToLastTurn;
     }
-    lastNumberSpoken = input[turn];
-    addMention(lastNumberSpoken, turn, lastMentions);
-    
-    turn++;
+    addMention(lastNumberSpoken, turn, lastMentions);    
+
+    if (turn === endTurn) break;
+
+    turn++;    
   }
 
   return lastNumberSpoken;
