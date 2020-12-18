@@ -1,84 +1,58 @@
 import { readInput } from '../../common';
 
-const input = readInput(`${__dirname}/input`, '\n').map((operation: string): string[] => operation.replace(/\s/g, '').split(''));
+type OperatorFunction = (a: number, b: number) => number;
+type Operator = [string, OperatorFunction];
+type ExpressionResolver = (expression: string, operators: Operator[]) => number;
 
-function part01(): number {  
-  return input.reduce((total: number, operation: string[]): number => total + solveOperation(operation), 0);
-}
+const input = readInput(`${__dirname}/input`, '\n').map((operation: string): string => operation.replace(/\s/g, ''));
 
-function part02(): number {
-  return input.reduce((total: number, operation: string[]): number => {
-    const finalOperation = reduceOperation(operation);
+const sum: Operator = ['+', (a: number, b: number): number => a + b];
+const multiplication: Operator = ['*', (a: number, b: number): number => a * b];
 
-    return solveExpression(finalOperation) + total;
+function part0102(expressionResolver: ExpressionResolver): number {  
+  return input.reduce((total: number, operation: string): number => {
+    return reduceOperation(operation, [sum, multiplication], expressionResolver) + total
   }, 0);
 }
 
-function reduceOperation(expression: string[]): string[] {
-  let finalexpression = expression.join('');
+function reduceOperation(expression: string, operators: Operator[], solveExpression: ExpressionResolver): number {
+  let finalexpression = expression;
   const matcher = /\([\d+*]+\)/;
   let match: RegExpExecArray = null;  
 
   while (match = matcher.exec(finalexpression)) {
     const innerExpression = finalexpression.substring(match.index + 1, match.index + match[0].length - 1);
 
-    finalexpression = finalexpression.replace(match[0], `${solveExpression(splitByOperators(innerExpression))}`)
+    finalexpression = finalexpression.replace(match[0], `${solveExpression(innerExpression, operators)}`)
   }
 
-  return splitByOperators(finalexpression);
+  return solveExpression(finalexpression, operators);
 }
 
-function solveOperation(expression: string[]): number {
-  let operators = [...expression];
-  const operation: any = [];
-  let currentValue = null;
+function solveExpressionInOrder(expression: string, operators: Operator[]): number {
+  let operation = splitByOperators(expression, operators);
+  let nextSign = null;
 
-  while (currentValue = operators.shift()) {
-    if (currentValue === '(') {      
-      const innerExpression: string[] = [];
-      let value = null;
-      let openInners = 1;
-      
-      while (true) {
-        value = operators.shift();
-        if (value === ')') {
-          if (openInners === 1) break;
-          openInners--;
-        }
-        if (value === '(') openInners++;
-        innerExpression.push(value);
-      }
+  const operatorOMethods = operators.reduce((total: { [index: string]: OperatorFunction }, operator: Operator) => {
+    const [name, method] = operator;
 
-      currentValue = solveOperation(innerExpression);
-    }
-    operation.push(currentValue);
+    return { ...total, [name]: method };
+    }, {});
 
-    if (operation.length === 3) {
-      const [left, operator, right]: [number, string, number] = operation;
-      let result = null;      
-      
-      switch (operator) {
-        case '+': result = Number(left) + Number(right); break;
-        case '*': result = Number(left) * Number(right); break;
-      }
+  while (nextSign = operation.find((sign: string) => !!operatorOMethods[sign])) {
+    const operatorIndex = operation.indexOf(nextSign);
+    const leftSide = Number(operation[operatorIndex - 1]);
+    const rightSide = Number(operation[operatorIndex + 1]);
+    const result = operatorOMethods[nextSign](leftSide, rightSide);
 
-      operation.push(result);
-      operation.shift();
-      operation.shift();
-      operation.shift();
-    }
+    operation.splice(operatorIndex-1, 3, `${result}`)
   }
-    
-  return operation[0];
+  
+  return Number(operation[0]);
 }
 
-type Operator = [string, (a: number, b: number) => number];
-
-const sum: Operator = ['+', (a: number, b: number): number => a + b];
-const multiplication: Operator = ['*', (a: number, b: number): number => a * b];
-
-function solveExpression(expression: string[], operators: Operator[] = [sum, multiplication]): number {
-  let operation = [...expression];
+function solveExpression(expression: string, operators: Operator[]): number {
+  let operation = splitByOperators(expression, operators);
 
   operators.forEach((operator: Operator): void => {
     const [sign, execute] = operator;
@@ -96,7 +70,7 @@ function solveExpression(expression: string[], operators: Operator[] = [sum, mul
   return Number(operation[0]);
 }
 
-function splitByOperators(expression: string, operators: Operator[] = [sum, multiplication]): string[] {
+function splitByOperators(expression: string, operators: Operator[]): string[] {
   const result: string[] = [];
   let acc = '';
   
@@ -117,5 +91,5 @@ function splitByOperators(expression: string, operators: Operator[] = [sum, mult
   return result;
 }
 
-process.stdout.write(`Part 1: ${part01()}\n`);
-process.stdout.write(`Part 2: ${part02()}\n`);
+process.stdout.write(`Part 1: ${part0102(solveExpressionInOrder)}\n`);
+process.stdout.write(`Part 2: ${part0102(solveExpression)}\n`);
