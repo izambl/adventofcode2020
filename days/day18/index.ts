@@ -1,21 +1,29 @@
 import { readInput } from '../../common';
 
 type OperatorFunction = (a: number, b: number) => number;
-type Operator = [string, OperatorFunction];
-type ExpressionResolver = (expression: string, operators: Operator[]) => number;
+interface Operators { [index: string]: { method: OperatorFunction, order: number } };
 
 const input = readInput(`${__dirname}/input`, '\n').map((operation: string): string => operation.replace(/\s/g, ''));
 
-const sum: Operator = ['+', (a: number, b: number): number => a + b];
-const multiplication: Operator = ['*', (a: number, b: number): number => a * b];
+function part01(): number {
+  const operators: Operators = {
+    '+': { method: (a, b) => a + b, order: 0 },
+    '*': { method: (a, b) => a * b, order: 0 },
+  };
 
-function part0102(expressionResolver: ExpressionResolver): number {  
-  return input.reduce((total: number, operation: string): number => {
-    return reduceOperation(operation, [sum, multiplication], expressionResolver) + total
-  }, 0);
+  return input.reduce((total: number, operation: string): number => reduceOperation(operation, operators) + total, 0);
 }
 
-function reduceOperation(expression: string, operators: Operator[], solveExpression: ExpressionResolver): number {
+function part02(): number {
+  const operators: Operators = {
+    '+': { method: (a, b) => a + b, order: 0 },
+    '*': { method: (a, b) => a * b, order: 1 },
+  };
+
+  return input.reduce((total: number, operation: string): number => reduceOperation(operation, operators) + total, 0);
+}
+
+function reduceOperation(expression: string, operators: Operators): number {
   let finalexpression = expression;
   const matcher = /\([\d+*]+\)/;
   let match: RegExpExecArray = null;  
@@ -29,67 +37,52 @@ function reduceOperation(expression: string, operators: Operator[], solveExpress
   return solveExpression(finalexpression, operators);
 }
 
-function solveExpressionInOrder(expression: string, operators: Operator[]): number {
-  let operation = splitByOperators(expression, operators);
-  let nextSign = null;
+function solveExpression(expression: string, operators: Operators): number {
+  const operation = splitByOperators(expression, operators);
+  const expressionOperators = getExpressionOperators(expression, operators);
 
-  const operatorOMethods = operators.reduce((total: { [index: string]: OperatorFunction }, operator: Operator) => {
-    const [name, method] = operator;
-
-    return { ...total, [name]: method };
-    }, {});
-
-  while (nextSign = operation.find((sign: string) => !!operatorOMethods[sign])) {
-    const operatorIndex = operation.indexOf(nextSign);
+  expressionOperators.forEach((sign: string) => {
+    const operatorIndex = operation.indexOf(sign);
     const leftSide = Number(operation[operatorIndex - 1]);
     const rightSide = Number(operation[operatorIndex + 1]);
-    const result = operatorOMethods[nextSign](leftSide, rightSide);
+    const result = operators[sign].method(leftSide, rightSide);
 
     operation.splice(operatorIndex-1, 3, `${result}`)
-  }
-  
-  return Number(operation[0]);
-}
-
-function solveExpression(expression: string, operators: Operator[]): number {
-  let operation = splitByOperators(expression, operators);
-
-  operators.forEach((operator: Operator): void => {
-    const [sign, execute] = operator;
-
-    while (operation.indexOf(sign) !== -1) {
-      const operatorIndex = operation.indexOf(sign);
-      const leftSide = Number(operation[operatorIndex - 1]);
-      const rightSide = Number(operation[operatorIndex + 1]);
-      const result = execute(leftSide, rightSide);
-
-      operation.splice(operatorIndex-1, 3, `${result}`)
-    }
   });
   
   return Number(operation[0]);
 }
 
-function splitByOperators(expression: string, operators: Operator[]): string[] {
+function getExpressionOperators(expression: string, operators: Operators): string[] {
+  const operatorSymbols = Object.keys(operators).join('');
+  const operatorsRegexp = new RegExp(`[${operatorSymbols}]`, 'g');
+  const expressionOperators: string[] = expression.match(operatorsRegexp);
+
+  expressionOperators.sort((operatorA: string, operatorB: string) => operators[operatorA].order - operators[operatorB].order);
+
+  return expressionOperators;
+}
+
+function splitByOperators(expression: string, operators: Operators): string[] {
   const result: string[] = [];
   let acc = '';
   
-  for (let i = 0; i < expression.length; i++) {
-    const nextChar = expression[i];
-
-    if (operators.some((operator: Operator) => operator[0] === nextChar)) {
+  for (const nextChar of expression) {
+    if (operators[nextChar]) {
       result.push(acc);
       result.push(nextChar);
       acc = '';
-    } else {
-      acc += nextChar;
+
+      continue;
     }
-  } 
+
+    acc += nextChar;
+  }
 
   result.push(acc);
   
   return result;
 }
 
-process.stdout.write(`Part 1: ${part0102(solveExpressionInOrder)}\n`);
-process.stdout.write(`Part 2: ${part0102(solveExpression)}\n`);
+process.stdout.write(`Part 1: ${part01()}\n`);
+process.stdout.write(`Part 2: ${part02()}\n`);
