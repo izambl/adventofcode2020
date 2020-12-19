@@ -6,7 +6,7 @@ interface Rule2Object { type: number, body: Array<number[]> }
 type RuleObject = Rule0Object | Rule1Object | Rule2Object;
 interface Rules { [index: number]: RuleObject }
 
-const [rawRules, rawMessage] = readInput(`${__dirname}/input`, '\n\n');
+const [rawRules, rawMessages] = readInput(`${__dirname}/input`, '\n\n');
 
 const rulesBook: Rules = rawRules.split('\n').reduce((rulesObject: Rules, rawRule: string): Rules => {
   const [number, rule] = rawRule.split(': ');
@@ -26,7 +26,7 @@ const rulesBook: Rules = rawRules.split('\n').reduce((rulesObject: Rules, rawRul
   return { ...rulesObject, [number]: ruleObject };
 }, {});
 
-const messages: string[] = rawMessage.split('\n');
+const messages: string[] = rawMessages.split('\n');
 
 function part01(): number {
   const rulesRegExp = new RegExp(`^${buildExpression(0, rulesBook)}$`);
@@ -39,13 +39,10 @@ function part01(): number {
 }
 
 function part02(): number {
-  const rule42 = buildExpression(42, rulesBook);
-  const rule31 = buildExpression(31, rulesBook);
-
   const newRulesBook: Rules = {
     ...rulesBook,
-    8: { type: 1, body: `(${rule42}+)` },
-    11: { type: 1, body: `((${rule42}${rule31})|(${rule42}{2}${rule31}{2})|(${rule42}{3}${rule31}{3})|(${rule42}{4}${rule31}{4})|(${rule42}{5}${rule31}{5}))` },
+    8: { type: 2, body: [[42], [42 ,42], [42, 42, 42], [42, 42, 42, 42], [42, 42, 42, 42, 42]] },
+    11: { type: 2, body: [[42, 31], [42, 42, 31, 31], [42, 42, 42, 31, 31, 31], [42, 42, 42, 42, 31, 31, 31, 31]] },
   };
   const rulesRegExp = new RegExp(`^${buildExpression(0, newRulesBook)}$`);
 
