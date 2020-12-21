@@ -60,9 +60,9 @@ function part02(): number {
 
   let right = null;
   let bottom = null;
-  firstCorner = flip(firstCorner);
+  firstCorner = flipTile(firstCorner);
   do {
-    firstCorner = rotateRight(firstCorner);
+    firstCorner = rotateTile(firstCorner);
     right = findNeighbor(firstCorner, Border.r, tilesReserve);
     bottom = findNeighbor(firstCorner, Border.b, tilesReserve);    
   } while(!right || !bottom)
@@ -83,7 +83,7 @@ function part02(): number {
   }
 
   const tilesWithoutBorders = finalImage.map((tileRow: Tile[]): Tile[] => {
-    return tileRow.map((tile: Tile): Tile => removeBorders(tile));
+    return tileRow.map((tile: Tile): Tile => removeTileImageBorders(tile));
   });
 
   const stitchedImage: Array<string[]> = [];
@@ -99,33 +99,35 @@ function part02(): number {
   });
 
   let monsterImage = stitchedImage;
-  let monsters = findMonsters(stitchedImage);
+  let monsters = countMonsters(stitchedImage);
   if (!monsters) {
     monsterImage = rotateImage(monsterImage);
-    monsters = findMonsters(stitchedImage);
+    monsters = countMonsters(stitchedImage);
   }
   if (!monsters) {
     monsterImage = rotateImage(monsterImage);
-    monsters = findMonsters(stitchedImage);
+    monsters = countMonsters(stitchedImage);
   }
   if (!monsters) {
     monsterImage = rotateImage(monsterImage);
-    monsters = findMonsters(stitchedImage);
+    monsters = countMonsters(stitchedImage);
   }
   monsterImage = flipImage(monsterImage);
-  monsters = findMonsters(stitchedImage);
+  monsters = countMonsters(stitchedImage);
   if (!monsters) {
     monsterImage = rotateImage(monsterImage);
-    monsters = findMonsters(stitchedImage);
+    monsters = countMonsters(stitchedImage);
   }
   if (!monsters) {
     monsterImage = rotateImage(monsterImage);
-    monsters = findMonsters(stitchedImage);
+    monsters = countMonsters(stitchedImage);
   }
   if (!monsters) {
     monsterImage = rotateImage(monsterImage);
-    monsters = findMonsters(stitchedImage);
+    monsters = countMonsters(stitchedImage);
   }
+
+  console.log('Monsters', monsters);
 
   let hashtagCount = 0;
   for (let y = 0; y < stitchedImage.length; y++) {
@@ -159,15 +161,15 @@ function findNeighbor(tile: Tile, border: Border, tilesReserve: Tile[]): Tile {
     let currentTile = tilesReserve[i];
 
     for (let round = 0; round < 4; round++) {
-      currentTile = rotateRight(currentTile);
+      currentTile = rotateTile(currentTile);
       if (currentTile.borders[borderToFind] === tile.borders[border]) {
         return currentTile
       };
     }
 
-    currentTile = flip(currentTile);
+    currentTile = flipTile(currentTile);
     for (let round = 0; round < 4; round++) {
-      currentTile = rotateRight(currentTile);
+      currentTile = rotateTile(currentTile);
       if (currentTile.borders[borderToFind] === tile.borders[border]) {
         return currentTile
       };
@@ -182,13 +184,13 @@ function countNeighbors(tile: Tile): number {
   let currentTile = tile;
 
   for (let round = 0; round < 4; round++) {
-    currentTile = rotateRight(currentTile);
+    currentTile = rotateTile(currentTile);
 
     const hasNeighbor = imageTiles.some((imageTile: Tile) => {
       if (imageTile.id === currentTile.id) return false;
             
       for (let round = 0; round < 4; round++) {   
-        imageTile = rotateRight(imageTile);
+        imageTile = rotateTile(imageTile);
         
         if (imageTile.borders.l === currentTile.borders.r || imageTile.borders.l === currentTile.borders.r.split('').reverse().join('')) {
           return true;
@@ -204,58 +206,19 @@ function countNeighbors(tile: Tile): number {
   return neighbors;
 }
 
-function rotateRight(tile: Tile): Tile {
+
+
+function removeTileImageBorders(tile: Tile): Tile {
+  const imageWithoutBorders = tile.image.map((imageRow: string[]): string[] => [...imageRow].slice(1, -1));
+
   return {
     id: tile.id,
-    image: rotateImage(tile.image),
-    borders: {
-      t: tile.borders.l.split('').reverse().join(''),
-      r: tile.borders.t,
-      b: tile.borders.r.split('').reverse().join(''),
-      l: tile.borders.b,
-    },
+    image: imageWithoutBorders.slice(1, -1),
+    borders: { ...tile.borders },
   };
 }
 
-function flip(tile: Tile): Tile {
-  return {
-    id: tile.id,
-    image: flipImage(tile.image),
-    borders: {
-      t: tile.borders.t.split('').reverse().join(''),
-      r: tile.borders.l,
-      b: tile.borders.b.split('').reverse().join(''),
-      l: tile.borders.r,
-    },
-  };
-}
-
-function removeBorders(tile: Tile): Tile {
-  let imageWithoutBorders = [...tile.image.slice(1)];
-  imageWithoutBorders = tile.image.slice(0, -1);
-
-  imageWithoutBorders = imageWithoutBorders.map((imageRow: string[]): string[] => {
-    let newImageRow = [...imageRow.slice(1)];
-    newImageRow = newImageRow.slice(0, -1);
-
-    return newImageRow;
-  });
-
-  const tileWithBordersRemoved = {
-    id: tile.id,
-    image: imageWithoutBorders,
-    borders: {
-      t: tile.borders.t,
-      r: tile.borders.r,
-      b: tile.borders.b,
-      l: tile.borders.l,
-    },
-  };
-
-  return tileWithBordersRemoved;
-}
-
-function findMonsters(image: Array<string[]>): number {
+function countMonsters(image: Array<string[]>): number {
   let monsters = 0;
 
   for (let y = 0; y < image.length; y++) {
@@ -293,23 +256,46 @@ function isMonsterHere(image: Array<string[]>, x: number, y: number): boolean {
   return monster;
 }
 
+function rotateTile(tile: Tile): Tile {
+  return {
+    id: tile.id,
+    image: rotateImage(tile.image),
+    borders: {
+      t: tile.borders.l.split('').reverse().join(''),
+      r: tile.borders.t,
+      b: tile.borders.r.split('').reverse().join(''),
+      l: tile.borders.b,
+    },
+  };
+}
+
+function flipTile(tile: Tile): Tile {
+  return {
+    id: tile.id,
+    image: flipImage(tile.image),
+    borders: {
+      t: tile.borders.t.split('').reverse().join(''),
+      r: tile.borders.l,
+      b: tile.borders.b.split('').reverse().join(''),
+      l: tile.borders.r,
+    },
+  };
+}
+
 function rotateImage(image: Array<string[]>): Array<string[]> {
-  let rotatedImage = [];
+  const rotatedImage: Array<string[]> = [...Array(image.length)].map(() => [...Array(image.length)]);
 
   for (let y = 0; y < image.length; y++) {
     for (let x = 0; x < image[y].length; x++) {
-      if (!rotatedImage[x]) rotatedImage[x] = [];
       rotatedImage[x][y] = image[y][x];
     } 
   }
 
-  return rotatedImage = rotatedImage.map((tileLine: string[]) => tileLine.reverse());
+  return flipImage(rotatedImage);
 }
 
 function flipImage(image: Array<string[]>): Array<string[]> {
-  const flippedImage = image.map((tileLine: string[]) => tileLine.reverse());
-  
-  return flippedImage;
+  return image.map((tileLine: string[]) => [...tileLine].reverse());
 }
 
 process.stdout.write(`Part 1: ${part01()}\n`);
