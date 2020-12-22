@@ -1,4 +1,4 @@
-import { readNumberInput } from '../../common'
+import { readNumberInput } from '../../common';
 
 const input = readNumberInput(`${__dirname}/input`);
 
@@ -8,7 +8,7 @@ function findAmounts1() {
       if (input[x] + input[y] === 2020) {
         return input[x] * input[y];
       }
-    }    
+    }
   }
   return -1;
 }

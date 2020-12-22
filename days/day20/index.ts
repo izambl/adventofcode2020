@@ -15,7 +15,7 @@ enum Border {
   t = 't',
   r = 'r',
   b = 'b',
-  l = 'l'
+  l = 'l',
 }
 
 const imageTiles: Tile[] = readInput(`${__dirname}/input`, '\n\n')
@@ -29,7 +29,7 @@ const imageTiles: Tile[] = readInput(`${__dirname}/input`, '\n\n')
       for (let x = 0; x < image[y].length; x++) {
         if (!imageArray[x]) imageArray[x] = [];
         imageArray[x][y] = image[y][x];
-      } 
+      }
     }
 
     const i: any = imageArray;
@@ -38,15 +38,19 @@ const imageTiles: Tile[] = readInput(`${__dirname}/input`, '\n\n')
     const b = `${i[9][0]}${i[9][1]}${i[9][2]}${i[9][3]}${i[9][4]}${i[9][5]}${i[9][6]}${i[9][7]}${i[9][8]}${i[9][9]}`;
     const l = `${i[0][0]}${i[1][0]}${i[2][0]}${i[3][0]}${i[4][0]}${i[5][0]}${i[6][0]}${i[7][0]}${i[8][0]}${i[9][0]}`;
 
-    return { id: tileId, image: imageArray, borders: { t, r, b, l }};
+    return {
+      id: tileId,
+      image: imageArray,
+      borders: {
+        t, r, b, l,
+      },
+    };
   });
 
-function part01(): number {  
+function part01(): number {
   const corners: Tile[] = imageTiles.filter((tile: Tile) => countNeighbors(tile) === 2);
 
-  return corners.reduce((total: number, corner: Tile) => {
-    return total * corner.id;
-  }, 1);
+  return corners.reduce((total: number, corner: Tile) => total * corner.id, 1);
 }
 
 function part02(): number {
@@ -62,8 +66,8 @@ function part02(): number {
   do {
     firstCorner = rotateTile(firstCorner);
     right = findNeighbor(firstCorner, Border.r, tilesReserve);
-    bottom = findNeighbor(firstCorner, Border.b, tilesReserve);    
-  } while(!right || !bottom)
+    bottom = findNeighbor(firstCorner, Border.b, tilesReserve);
+  } while (!right || !bottom);
 
   finalImage[0][0] = firstCorner;
 
@@ -77,14 +81,12 @@ function part02(): number {
         finalImage[y][x] = findNeighbor(finalImage[y - 1][x], Border.b, tilesReserve);
       }
       tilesReserve = removeTile(tilesReserve, finalImage[y][x]);
-    }  
+    }
   }
 
-  const tilesWithoutBorders = finalImage.map((tileRow: Tile[]): Tile[] => {
-    return tileRow.map((tile: Tile): Tile => removeTileImageBorders(tile));
-  });
+  const tilesWithoutBorders = finalImage.map((tileRow: Tile[]): Tile[] => tileRow.map((tile: Tile): Tile => removeTileImageBorders(tile)));
 
-  const stitchedImage: Array<string[]> = [];  
+  const stitchedImage: Array<string[]> = [];
 
   tilesWithoutBorders.forEach((tileRow: Tile[]) => {
     for (let i = 0; i < 8; i++) {
@@ -126,15 +128,15 @@ function part02(): number {
     monsterImage = rotateImage(monsterImage);
     monsters = countMonsters(monsterImage);
   }
-  
+
   countMonsters(monsterImage, true);
-  monsterImage.forEach((x: string[]) => console.log(x.join('').replace(/[#.]/g, ' ')))
+  monsterImage.forEach((x: string[]) => console.log(x.join('').replace(/[#.]/g, ' ')));
 
   let hashtagCount = 0;
   for (let y = 0; y < stitchedImage.length; y++) {
-    for (let x = 0; x < stitchedImage[y].length; x++) {      
+    for (let x = 0; x < stitchedImage[y].length; x++) {
       if (stitchedImage[y][x] === '#') hashtagCount++;
-    }  
+    }
   }
 
   return hashtagCount;
@@ -157,23 +159,23 @@ function findNeighbor(tile: Tile, border: Border, tilesReserve: Tile[]): Tile {
     case 'b': borderToFind = Border.t; break;
     case 'l': borderToFind = Border.r; break;
   }
-  
+
   for (let i = 0; i < tilesReserve.length; i++) {
     let currentTile = tilesReserve[i];
 
     for (let round = 0; round < 4; round++) {
       currentTile = rotateTile(currentTile);
       if (currentTile.borders[borderToFind] === tile.borders[border]) {
-        return currentTile
-      };
+        return currentTile;
+      }
     }
 
     currentTile = flipTile(currentTile);
     for (let round = 0; round < 4; round++) {
       currentTile = rotateTile(currentTile);
       if (currentTile.borders[borderToFind] === tile.borders[border]) {
-        return currentTile
-      };
+        return currentTile;
+      }
     }
   }
 
@@ -189,17 +191,17 @@ function countNeighbors(tile: Tile): number {
 
     const hasNeighbor = imageTiles.some((imageTile: Tile) => {
       if (imageTile.id === currentTile.id) return false;
-            
-      for (let round = 0; round < 4; round++) {   
+
+      for (let round = 0; round < 4; round++) {
         imageTile = rotateTile(imageTile);
-        
+
         if (imageTile.borders.l === currentTile.borders.r || imageTile.borders.l === currentTile.borders.r.split('').reverse().join('')) {
           return true;
-        };
+        }
       }
 
       return false;
-    })
+    });
 
     if (hasNeighbor) neighbors++;
   }
@@ -235,7 +237,7 @@ function isMonsterHere(image: Array<string[]>, x: number, y: number, paint: bool
   let monster = true;
 
   monster = monster && image?.[y][x + 18] === '#';
-  
+
   monster = monster && image?.[y + 1]?.[x] === '#';
   monster = monster && image?.[y + 1]?.[x + 5] === '#';
   monster = monster && image?.[y + 1]?.[x + 6] === '#';
@@ -303,7 +305,7 @@ function rotateImage(image: Array<string[]>): Array<string[]> {
   const rotatedImage: Array<string[]> = [...Array(image.length)].map(() => [...Array(image.length)]);
 
   for (let y = 0; y < image.length; y++) {
-    for (let x = 0; x < image[y].length; x++) {      
+    for (let x = 0; x < image[y].length; x++) {
       rotatedImage[x][image.length - y - 1] = image[y][x];
     }
   }

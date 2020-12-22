@@ -19,13 +19,13 @@ foods.forEach((food: Food) => {
   const [ingredients, allergens] = food;
 
   allergens.forEach((allergen: string) => {
-    if (!allergensObject[allergen]) allergensObject[allergen] = [];    
+    if (!allergensObject[allergen]) allergensObject[allergen] = [];
     allergensObject[allergen].push([...ingredients]);
   });
 });
 
 function part01(): number {
-  const allergens = Object.keys(allergensObject);  
+  const allergens = Object.keys(allergensObject);
   const ingredientsCount: { [index: string]: number } = {};
   const ingredientsWithAllergen: { [index: string]: boolean } = {};
 
@@ -33,7 +33,7 @@ function part01(): number {
     const [ingredients] = food;
 
     ingredients.forEach((ingredient: string) => {
-      if (!ingredientsCount[ingredient]) ingredientsCount[ingredient] = 0;    
+      if (!ingredientsCount[ingredient]) ingredientsCount[ingredient] = 0;
       ingredientsCount[ingredient]++;
     });
   });
@@ -41,7 +41,7 @@ function part01(): number {
   allergens.forEach((allergen: string) => {
     const food = intersection(...allergensObject[allergen]);
     // console.log(`Allergen: ${allergen}:  ${food}`);
-    food.forEach((foodString: string) => { ingredientsWithAllergen[foodString] = ingredientsWithAllergen[foodString] || true });
+    food.forEach((foodString: string) => { ingredientsWithAllergen[foodString] = ingredientsWithAllergen[foodString] || true; });
   });
 
   const badIngredients = Object.keys(ingredientsWithAllergen);
@@ -52,14 +52,13 @@ function part01(): number {
 
 function part02(): string {
   const allergens = cloneDeep(allergensObject);
-  const allergenNames = Object.keys(allergens);  
+  const allergenNames = Object.keys(allergens);
   const ingredientAndAlergen: { [index: string]: string } = {};
-    
 
   while (allergenNames.length) {
     const allergen = allergenNames[0];
     const ingredient = intersection(...allergens[allergen]);
-    
+
     if (ingredient.length === 1) {
       const ingredientFound = ingredient[0];
 
@@ -76,7 +75,7 @@ function part02(): string {
     } else {
       allergenNames.push(allergenNames.shift());
     }
-  };
+  }
 
   const badIngredients = Object.keys(ingredientAndAlergen).sort((a: string, b: string) => {
     if (ingredientAndAlergen[a] > ingredientAndAlergen[b]) return 1;

@@ -1,4 +1,4 @@
-import { readInput } from '../../common'
+import { readInput } from '../../common';
 
 type Instruction = [string, number];
 type Position = [number, number];
@@ -9,7 +9,7 @@ function part01(): number {
   let position: Position = [0, 0];
   let direction = 'E';
 
-  for (const [instruction, value] of input ) {
+  for (const [instruction, value] of input) {
     switch (instruction) {
       case 'N':
       case 'E':
@@ -28,7 +28,7 @@ function part02(): number {
   let shipPosition: Position = [0, 0];
   let waypointPosition: Position = [10, 1];
 
-  for (const [instruction, value] of input ) {
+  for (const [instruction, value] of input) {
     switch (instruction) {
       case 'N':
       case 'E':
@@ -41,7 +41,6 @@ function part02(): number {
   }
 
   return Math.abs(shipPosition[0]) + Math.abs(shipPosition[1]);
-
 }
 
 function rotateWaypoint(direction: string, degrees: number, waypoint: Position): Position {
@@ -54,8 +53,8 @@ function rotateWaypoint(direction: string, degrees: number, waypoint: Position):
     newWaypointPosition = direction === 'R'
       ? [y, -x]
       : [-y, x];
-  };
-  
+  }
+
   return newWaypointPosition;
 }
 

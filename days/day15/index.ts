@@ -9,7 +9,7 @@ function part0102(endTurn = 2020): number {
   let lastNumberSpoken: number = null;
   let turn = 1;
 
-  for (let i = 0; i < input.length; i++) {    
+  for (let i = 0; i < input.length; i++) {
     lastNumberSpoken = input[i];
     addMention(lastNumberSpoken, turn, lastMentions);
     turn++;
@@ -24,7 +24,7 @@ function part0102(endTurn = 2020): number {
 
     if (turn === endTurn) break;
 
-    turn++;    
+    turn++;
   }
 
   return lastNumberSpoken;

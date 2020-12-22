@@ -1,18 +1,14 @@
-import { readInput } from '../../common'
+import { readInput } from '../../common';
 
 const input = readInput(`${__dirname}/input`, '\n\n');
 const groups = input.map((group: string): string[] => group.split('\n'));
 
 function part01(): number {
-  return groups.reduce((total: number, group: string[]) => {
-    return total + countYesOnGroup(group);
-  }, 0);
+  return groups.reduce((total: number, group: string[]) => total + countYesOnGroup(group), 0);
 }
 
 function part02(): number {
-  return groups.reduce((total: number, group: string[]) => {
-    return total + countAllYesOnGroup(group);
-  }, 0);
+  return groups.reduce((total: number, group: string[]) => total + countAllYesOnGroup(group), 0);
 }
 
 function countYesOnGroup(group: string[]): number {
@@ -21,7 +17,7 @@ function countYesOnGroup(group: string[]): number {
   group.forEach((personAnswers: string): void => {
     [...personAnswers].forEach((answer: string): void => {
       yesAnswers[answer] = true;
-    })
+    });
   });
 
   return Object.keys(yesAnswers).length;
@@ -33,7 +29,7 @@ function countAllYesOnGroup(group: string[]): number {
   group.forEach((personAnswers: string): void => {
     [...personAnswers].forEach((answer: string): void => {
       yesAnswers[answer] = (yesAnswers[answer] || 0) + 1;
-    })
+    });
   });
 
   return Object.keys(yesAnswers).reduce((total: number, answer: string) => {

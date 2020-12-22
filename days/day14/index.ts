@@ -1,4 +1,4 @@
-import { readInput } from '../../common'
+import { readInput } from '../../common';
 
 type Line = [string, string];
 
@@ -17,7 +17,7 @@ function part01(): number {
       currentMask = value;
     } else {
       const memoryPosition = /\[(.*?)\]/.exec(code)[1];
-     
+
       memory[memoryPosition] = applyMask(Number(value), currentMask);
     }
   });
@@ -35,7 +35,7 @@ function part02(): number {
     } else {
       const memoryPosition = /\[(.*?)\]/.exec(code)[1];
       const memoryPositions = applyMemoryMask(Number(memoryPosition), currentMask);
-      
+
       memoryPositions.forEach((address: string) => {
         memory[address] = Number(value);
       });
@@ -47,9 +47,9 @@ function part02(): number {
 
 function applyMask(value: number, mask: string): number {
   const binaryValue = `${'0'.repeat(36)}${value.toString(2)}`.slice(-36).split('');
-  
+
   for (let i = 0; i < mask.length; i++) {
-    if (mask[i] === 'X') continue; 
+    if (mask[i] === 'X') continue;
 
     binaryValue[i] = mask[i];
   }

@@ -1,7 +1,7 @@
-import { readInput } from '../../common'
+import { readInput } from '../../common';
 
 const input = readInput(`${__dirname}/input`).map(Number);
- 
+
 function part01(): number {
   const preamble = 25;
   let currentNumber = 0;
@@ -31,7 +31,7 @@ function part02(): number {
       if (totalSum === invalidNumber) {
         return Math.max(...numberList) + Math.min(...numberList);
       }
-    }  
+    }
   }
 
   return 0;
@@ -45,7 +45,7 @@ function findNumbersThatSum(preambleList: number[], number: number) {
       }
     }
   }
-  
+
   return false;
 }
 

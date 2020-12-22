@@ -1,4 +1,4 @@
-import { readInput } from '../../common'
+import { readInput } from '../../common';
 
 const input = readInput(`${__dirname}/input`).map((row) => row.split(''));
 
@@ -11,9 +11,7 @@ function walk1(): number {
 function walk2(): number {
   const slopes = [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]];
 
-  return slopes.reduce((total: number, slope: [number, number]) => {
-    return total * walkTheWalk(slope, input);
-  }, 1)
+  return slopes.reduce((total: number, slope: [number, number]) => total * walkTheWalk(slope, input), 1);
 }
 
 function walkTheWalk(slope: [number, number], input: string[][]): number {

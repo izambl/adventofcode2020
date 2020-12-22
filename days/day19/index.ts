@@ -10,7 +10,7 @@ const [rawRules, rawMessages] = readInput(`${__dirname}/input`, '\n\n');
 
 const rulesBook: Rules = rawRules.split('\n').reduce((rulesObject: Rules, rawRule: string): Rules => {
   const [number, rule] = rawRule.split(': ');
-  const ruleObject: RuleObject = { type: null, body: null }
+  const ruleObject: RuleObject = { type: null, body: null };
 
   if (rule.indexOf('"') !== -1) {
     ruleObject.type = 1;
@@ -41,7 +41,7 @@ function part01(): number {
 function part02(): number {
   const newRulesBook: Rules = {
     ...rulesBook,
-    8: { type: 2, body: [[42], [42 ,42], [42, 42, 42], [42, 42, 42, 42], [42, 42, 42, 42, 42]] },
+    8: { type: 2, body: [[42], [42, 42], [42, 42, 42], [42, 42, 42, 42], [42, 42, 42, 42, 42]] },
     11: { type: 2, body: [[42, 31], [42, 42, 31, 31], [42, 42, 42, 31, 31, 31], [42, 42, 42, 42, 31, 31, 31, 31]] },
   };
   const rulesRegExp = new RegExp(`^${buildExpression(0, newRulesBook)}$`);

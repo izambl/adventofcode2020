@@ -1,5 +1,5 @@
 import { ENGINE_METHOD_EC } from 'constants';
-import { readInput } from '../../common'
+import { readInput } from '../../common';
 
 const input = readInput(`${__dirname}/input`);
 
@@ -8,7 +8,7 @@ function part01(): number {
     const [row, column] = findRowAndColumn(boardingPass);
 
     return (row * 8) + column;
-  })
+  });
 
   return Math.max(...boardingPassesIds);
 }
@@ -26,7 +26,7 @@ function part02(): number {
 
     lastBoardingPassId = boardingPassId;
   }
-    
+
   throw new Error('Boarding pass not found');
 }
 

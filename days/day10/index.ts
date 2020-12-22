@@ -1,4 +1,4 @@
-import { readInput } from '../../common'
+import { readInput } from '../../common';
 
 const input = readInput(`${__dirname}/input`).map(Number);
 const sortedInput = [0, ...input, Math.max(...input) + 3].sort((a: number, b: number) => a - b);
@@ -41,9 +41,9 @@ function part02(): number {
 
     for (let m = device + 3; m < multipliers.length; m++) {
       multipliers[m] = currentPaths;
-    }    
+    }
   }
-  
+
   return currentPaths;
 }
 
@@ -51,7 +51,7 @@ function part02(): number {
 function part02bf(): number {
   let totalWays = 0;
 
-  function walkDevices(combination: number[]) {    
+  function walkDevices(combination: number[]) {
     totalWays += 1;
 
     for (let i = 0; i < combination.length; i++) {
@@ -69,7 +69,6 @@ process.stdout.write(`Part 1: ${part01()}\n`);
 
 process.stdout.write(`Part 2: ${part02()}\n`);
 
-
 // Manual runs part 01
 // multipliers 1 1 1 2 4  7  13 13
 // devices     0 3 4 5 6  7  8 11
@@ -77,39 +76,36 @@ process.stdout.write(`Part 2: ${part02()}\n`);
 // total paths 1 3 5 9 13 13 13
 
 // 0
-// 0 3 4 5 6 7 8 11  
+// 0 3 4 5 6 7 8 11
 
 // 3: paths + ways-1 * multiplier
-// 0 3 4 5 6 7 8 11  
-// 0 3   5 6 7 8 11  
-// 0 3     6 7 8 11  
+// 0 3 4 5 6 7 8 11
+// 0 3   5 6 7 8 11
+// 0 3     6 7 8 11
 
 // 4: paths + ways-1 * multiplier
-// 0 3 4 5 6 7 8 11  
-// 0 3 4   6 7 8 11  
-// 0 3 4     7 8 11  
-// 0 3   5 6 7 8 11  
-// 0 3     6 7 8 11  
+// 0 3 4 5 6 7 8 11
+// 0 3 4   6 7 8 11
+// 0 3 4     7 8 11
+// 0 3   5 6 7 8 11
+// 0 3     6 7 8 11
 
 // 5: paths + ways-1 * multiplier
-// 0 3 4 5 6 7 8 11  
-// 0 3 4 5   7 8 11  
-// 0 3 4 5     8 11  
-// 0 3 4   6 7 8 11  
-// 0 3 4     7 8 11  
+// 0 3 4 5 6 7 8 11
+// 0 3 4 5   7 8 11
+// 0 3 4 5     8 11
+// 0 3 4   6 7 8 11
+// 0 3 4     7 8 11
 // 0 3   5 6 7 8 11
-// 0 3   5   7 8 11  
-// 0 3   5     8 11  
-// 0 3     6 7 8 11 
-
-
+// 0 3   5   7 8 11
+// 0 3   5     8 11
+// 0 3     6 7 8 11
 
 // Manual runs part 01
 // multipliers  1  1  2  4  7  7  7  7  7  7  7  7  7  7  7  7
 // devices     00 01 02 03 04 07 08 09 10 11 14 17 18 19 20 23
 // ways         3  3  2  1  1  3  3  2  1  1  1  3  2  1  1  0
 // total paths  3  5  7
-
 
 // 00 01 02 03 04 07 08 09 10 11 14 17 18 19 20 23
 // 00 01 02    04 07 08 09 10 11 14 17 18 19 20 23
@@ -119,13 +115,11 @@ process.stdout.write(`Part 2: ${part02()}\n`);
 // 00    02    04 07 08 09 10 11 14 17 18 19 20 23
 // 00       03 04 07 08 09 10 11 14 17 18 19 20 23
 
-
 // 3-- *=0,*=1,*=2 por el multiplier del actual
 // 2--   0 1 por el multiplier del actual
 
-
 // --: 1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
 // 00:    1  2  3  3  3  3  3  3  3  3  3  3  3  3  3
-// 01: 
-// 02: 
-// 03: 
+// 01:
+// 02:
+// 03:

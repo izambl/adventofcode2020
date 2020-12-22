@@ -1,7 +1,7 @@
-import { readInput } from '../../common'
+import { readInput } from '../../common';
 
 const input = readInput(`${__dirname}/input`);
-const bagsArray = input.map((bag: string): [string, string]=>{
+const bagsArray = input.map((bag: string): [string, string] => {
   const rawBag: string[] = bag.replace(/bag,/g, 'bags,').replace(/bag\./g, 'bags.').replace(/\./g, '').split(' bags contain ');
 
   return [rawBag[0], rawBag[1].replace(/ bags/g, '')];
@@ -17,14 +17,13 @@ const bagsObject = bagsArray.reduce((bagObject: any, bag: string[]) => {
     return [...childrenObjects, [color, Number(quantity)]];
   }, []);
 
-  
-   return { ...bagObject, [bagColor]: bagcontents };
- }, {});
+  return { ...bagObject, [bagColor]: bagcontents };
+}, {});
 
 function part01(): number {
   const BAG = 'shiny gold';
   const possibleParents = {};
- 
+
   parentFinder([BAG], possibleParents);
 
   return Object.keys(possibleParents).length;
@@ -53,7 +52,7 @@ function childrenCounter(color: string, multiplier: number = 1) {
 function parentFinder(colors: string[], possibleParents: { [index: string]: boolean }) {
   colors.forEach((color: string) => {
     const parents = findParentsOf(color);
-    
+
     if (parents.length) {
       parents.forEach((parentColor: string) => { possibleParents[parentColor] = true; });
       parentFinder(parents, possibleParents);

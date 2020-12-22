@@ -1,24 +1,24 @@
-import { readInput } from '../../common'
+import { readInput } from '../../common';
 
 const input = readInput(`${__dirname}/input`).map((instruction: string): [string, number] => {
   const [command, num] = instruction.split(' ');
-  
+
   return [command, Number(num)];
 });
 
-function part01(): number  {
+function part01(): number {
   try {
-    runProgram(input)
-  } catch (error) {      
+    runProgram(input);
+  } catch (error) {
     return Number(error.message);
   }
 }
 
-function part02(): number  {
+function part02(): number {
   let result = 0;
   let currentLine = 0;
   let switchLine = false;
-  
+
   while (!result) {
     try {
       result = switchLine ? runProgram(input, currentLine) : runProgram(input);
@@ -38,7 +38,7 @@ function part02(): number  {
 function runProgram(program: Array<[string, number]>, switchLine: number | null = null): number {
   let accumulator = 0;
   let currentLine = 0;
-  const linesRan: { [index: number]: boolean } = {}; 
+  const linesRan: { [index: number]: boolean } = {};
 
   while (currentLine !== program.length) {
     const [instruction, value] = input[currentLine];

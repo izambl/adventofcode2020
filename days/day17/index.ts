@@ -1,6 +1,6 @@
 import { readInput } from '../../common';
 
-interface State { [index: string]: string };
+interface State { [index: string]: string }
 type Position = [number, number, number];
 type Position2 = [number, number, number, number];
 
@@ -12,9 +12,9 @@ function part01(): number {
   for (let y = 0; y < input.length; y++) {
     for (let x = 0; x < input[y].length; x++) {
       initialState[`${x} ${y} 0`] = input[y][x];
-    }  
+    }
   }
-  
+
   let currentState = { ...initialState };
   let cycles = 6;
 
@@ -35,9 +35,9 @@ function part02(): number {
   for (let y = 0; y < input.length; y++) {
     for (let x = 0; x < input[y].length; x++) {
       initialState[`${x} ${y} 0 0`] = input[y][x];
-    }  
+    }
   }
-  
+
   let currentState = { ...initialState };
   let cycles = 6;
 
@@ -59,8 +59,8 @@ function processRound(currentState: State): State {
     const [x, y, z] = key.split(' ').map(Number);
     const cubeState = newState[key];
     const activeNeighbors = findActiveNeighbors([x, y, z], currentState);
-    
-    if (cubeState === '#' && activeNeighbors !== 2 && activeNeighbors !== 3) newState[key] = '.';    
+
+    if (cubeState === '#' && activeNeighbors !== 2 && activeNeighbors !== 3) newState[key] = '.';
     if (cubeState === '.' && activeNeighbors === 3) newState[key] = '#';
   });
 
@@ -74,8 +74,8 @@ function processRound2(currentState: State): State {
     const [x, y, z, w] = key.split(' ').map(Number);
     const cubeState = newState[key];
     const activeNeighbors = findActiveNeighbors2([x, y, z, w], currentState);
-    
-    if (cubeState === '#' && activeNeighbors !== 2 && activeNeighbors !== 3) newState[key] = '.';    
+
+    if (cubeState === '#' && activeNeighbors !== 2 && activeNeighbors !== 3) newState[key] = '.';
     if (cubeState === '.' && activeNeighbors === 3) newState[key] = '#';
   });
 
@@ -97,7 +97,7 @@ function addStateLayer(currentState: State): State {
   });
 
   const minX = Math.min(...xs) - 1;
-  const maxX = Math.max(...xs) + 1; 
+  const maxX = Math.max(...xs) + 1;
   const minY = Math.min(...ys) - 1;
   const maxY = Math.max(...ys) + 1;
   const minZ = Math.min(...zs) - 1;
@@ -108,7 +108,7 @@ function addStateLayer(currentState: State): State {
       for (let z = minZ; z <= maxZ; z++) {
         newState[`${x} ${y} ${z}`] = newState[`${x} ${y} ${z}`] || '.';
       }
-    } 
+    }
   }
 
   return newState;
@@ -131,7 +131,7 @@ function addStateLayer2(currentState: State): State {
   });
 
   const minX = Math.min(...xs) - 1;
-  const maxX = Math.max(...xs) + 1; 
+  const maxX = Math.max(...xs) + 1;
   const minY = Math.min(...ys) - 1;
   const maxY = Math.max(...ys) + 1;
   const minZ = Math.min(...zs) - 1;
@@ -146,7 +146,7 @@ function addStateLayer2(currentState: State): State {
           newState[`${x} ${y} ${z} ${w}`] = newState[`${x} ${y} ${z} ${w}`] || '.';
         }
       }
-    } 
+    }
   }
 
   return newState;
@@ -157,7 +157,7 @@ function findActiveNeighbors(position: Position, state: State): number {
   let active = 0;
 
   for (let ix = x - 1; ix <= x + 1; ix++) {
-    for (let iy = y - 1; iy <= y + 1; iy++) {     
+    for (let iy = y - 1; iy <= y + 1; iy++) {
       for (let iz = z - 1; iz <= z + 1; iz++) {
         if (x === ix && y === iy && z === iz) continue;
         active += Number(state[`${ix} ${iy} ${iz}`] === '#');
@@ -173,8 +173,8 @@ function findActiveNeighbors2(position: Position2, state: State): number {
   let active = 0;
 
   for (let ix = x - 1; ix <= x + 1; ix++) {
-    for (let iy = y - 1; iy <= y + 1; iy++) {     
-      for (let iz = z - 1; iz <= z + 1; iz++) {     
+    for (let iy = y - 1; iy <= y + 1; iy++) {
+      for (let iz = z - 1; iz <= z + 1; iz++) {
         for (let iw = w - 1; iw <= w + 1; iw++) {
           if (x === ix && y === iy && z === iz && w === iw) continue;
           active += Number(state[`${ix} ${iy} ${iz} ${iw}`] === '#');

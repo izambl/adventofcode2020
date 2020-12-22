@@ -1,14 +1,14 @@
-import { readInput } from '../../common'
+import { readInput } from '../../common';
 
 const input = readInput(`${__dirname}/input`).map((seatsRow: string) => seatsRow.split(''));
 
 function part01(): number {
   let seatsArrangement = input;
   let seatsChanges = 0;
-  
-  do { 
+
+  do {
     [seatsArrangement, seatsChanges] = seattingRound(seatsArrangement, 4, checkAdjacentOccopies);
-  } while(seatsChanges)
+  } while (seatsChanges);
 
   return countOccupies(seatsArrangement);
 }
@@ -16,15 +16,15 @@ function part01(): number {
 function part02(): number {
   let seatsArrangement = input;
   let seatsChanges = 0;
-  
-  do { 
+
+  do {
     [seatsArrangement, seatsChanges] = seattingRound(seatsArrangement, 5, checkAdjacentOccopiesExtra);
-  } while(seatsChanges)
+  } while (seatsChanges);
 
   return countOccupies(seatsArrangement);
 }
 
-function seattingRound(seats: Array<string[]>, tolerance: number, adjacentFunction: (seats: Array<string[]>, x: number, y: number) => number): [Array<string[]>, number] {  
+function seattingRound(seats: Array<string[]>, tolerance: number, adjacentFunction: (seats: Array<string[]>, x: number, y: number) => number): [Array<string[]>, number] {
   const newSeatsArrangement = JSON.parse(JSON.stringify(seats));
   const oldSeatsArrangement = JSON.parse(JSON.stringify(seats));
   let changes = 0;
@@ -65,14 +65,13 @@ function checkAdjacentOccopies(seats: Array<string[]>, x: number, y: number): nu
 }
 
 function checkAdjacentOccopiesExtra(seats: Array<string[]>, x: number, y: number): number {
-  let adjacentOccupies = 0;  
+  let adjacentOccupies = 0;
   let xx = x;
   let yy = y;
 
-  
   while (seats?.[yy -= 1]?.[xx -= 1] === '.') { }
   adjacentOccupies += seats?.[yy]?.[xx] === '#' ? 1 : 0;
-  
+
   yy = y;
   xx = x;
   while (seats?.[yy -= 1]?.[xx] === '.') { }
@@ -97,12 +96,12 @@ function checkAdjacentOccopiesExtra(seats: Array<string[]>, x: number, y: number
   xx = x;
   while (seats?.[yy += 1]?.[xx += 1] === '.') { }
   adjacentOccupies += seats?.[yy]?.[xx] === '#' ? 1 : 0;
-  
+
   yy = y;
   xx = x;
   while (seats?.[yy]?.[xx -= 1] === '.') { }
   adjacentOccupies += seats?.[yy]?.[xx] === '#' ? 1 : 0;
-  
+
   yy = y;
   xx = x;
   while (seats?.[yy]?.[xx += 1] === '.') { }
@@ -119,7 +118,7 @@ function countOccupies(seatsArrangement: Array<string[]>) {
       if (seatsArrangement[y][x] === '#') count++;
     }
   }
-  
+
   return count;
 }
 

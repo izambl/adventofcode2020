@@ -1,4 +1,4 @@
-import { readInput } from '../../common'
+import { readInput } from '../../common';
 
 const input = readInput(`${__dirname}/input`);
 const departTime = Number(input[0]);
@@ -26,7 +26,7 @@ function part01(): number {
 // @TODO https://www.examrace.com/Study-Material/Aptitude/Quantitative-Reasoning/Solving-LCM-HCF-Remainder-Problems.html
 function part02(): number {
   let t = 0;
-  let solutionFound = false;
+  const solutionFound = false;
   let roundSolved = true;
   const maxBus = Math.max(...schedule);
   const maxBusIndex = schedule2.indexOf(String(maxBus));
