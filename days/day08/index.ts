@@ -12,6 +12,7 @@ function part01(): number {
   } catch (error) {
     return Number(error.message);
   }
+  return 0;
 }
 
 function part02(): number {
@@ -52,8 +53,8 @@ function runProgram(program: Array<[string, number]>, switchLine: number | null 
     if (switchLine === currentLine && instruction === 'jmp') switchedInstruction = 'nop';
 
     switch (switchedInstruction || instruction) {
-      case 'acc': accumulator += value; currentLine++; break;
-      case 'nop': currentLine++; break;
+      case 'acc': accumulator += value; currentLine += 1; break;
+      case 'nop': currentLine += 1; break;
       case 'jmp': currentLine += value; break;
     }
   }

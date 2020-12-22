@@ -14,13 +14,13 @@ function walk2(): number {
   return slopes.reduce((total: number, slope: [number, number]) => total * walkTheWalk(slope, input), 1);
 }
 
-function walkTheWalk(slope: [number, number], input: string[][]): number {
-  const width = input[0].length;
+function walkTheWalk(slope: [number, number], treePositions: string[][]): number {
+  const width = treePositions[0].length;
   const position = [0, 0];
   let treeCount = 0;
 
-  while (position[0] < input.length) {
-    treeCount += input[position[0]][position[1] % width] === '#' ? 1 : 0;
+  while (position[0] < treePositions.length) {
+    treeCount += treePositions[position[0]][position[1] % width] === '#' ? 1 : 0;
     position[1] += slope[0];
     position[0] += slope[1];
   }

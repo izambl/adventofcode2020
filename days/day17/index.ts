@@ -9,8 +9,8 @@ const input = readInput(`${__dirname}/input`, '\n').map((line: string) => line.s
 function part01(): number {
   const initialState: State = {};
 
-  for (let y = 0; y < input.length; y++) {
-    for (let x = 0; x < input[y].length; x++) {
+  for (let y = 0; y < input.length; y += 1) {
+    for (let x = 0; x < input[y].length; x += 1) {
       initialState[`${x} ${y} 0`] = input[y][x];
     }
   }
@@ -32,8 +32,8 @@ function part01(): number {
 function part02(): number {
   const initialState: State = {};
 
-  for (let y = 0; y < input.length; y++) {
-    for (let x = 0; x < input[y].length; x++) {
+  for (let y = 0; y < input.length; y += 1) {
+    for (let x = 0; x < input[y].length; x += 1) {
       initialState[`${x} ${y} 0 0`] = input[y][x];
     }
   }
@@ -103,9 +103,9 @@ function addStateLayer(currentState: State): State {
   const minZ = Math.min(...zs) - 1;
   const maxZ = Math.max(...zs) + 1;
 
-  for (let x = minX; x <= maxX; x++) {
-    for (let y = minY; y <= maxY; y++) {
-      for (let z = minZ; z <= maxZ; z++) {
+  for (let x = minX; x <= maxX; x += 1) {
+    for (let y = minY; y <= maxY; y += 1) {
+      for (let z = minZ; z <= maxZ; z += 1) {
         newState[`${x} ${y} ${z}`] = newState[`${x} ${y} ${z}`] || '.';
       }
     }
@@ -139,10 +139,10 @@ function addStateLayer2(currentState: State): State {
   const minW = Math.min(...ws) - 1;
   const maxW = Math.max(...ws) + 1;
 
-  for (let x = minX; x <= maxX; x++) {
-    for (let y = minY; y <= maxY; y++) {
-      for (let z = minZ; z <= maxZ; z++) {
-        for (let w = minW; w <= maxW; w++) {
+  for (let x = minX; x <= maxX; x += 1) {
+    for (let y = minY; y <= maxY; y += 1) {
+      for (let z = minZ; z <= maxZ; z += 1) {
+        for (let w = minW; w <= maxW; w += 1) {
           newState[`${x} ${y} ${z} ${w}`] = newState[`${x} ${y} ${z} ${w}`] || '.';
         }
       }
@@ -156,9 +156,9 @@ function findActiveNeighbors(position: Position, state: State): number {
   const [x, y, z] = position;
   let active = 0;
 
-  for (let ix = x - 1; ix <= x + 1; ix++) {
-    for (let iy = y - 1; iy <= y + 1; iy++) {
-      for (let iz = z - 1; iz <= z + 1; iz++) {
+  for (let ix = x - 1; ix <= x + 1; ix += 1) {
+    for (let iy = y - 1; iy <= y + 1; iy += 1) {
+      for (let iz = z - 1; iz <= z + 1; iz += 1) {
         if (x === ix && y === iy && z === iz) continue;
         active += Number(state[`${ix} ${iy} ${iz}`] === '#');
       }
@@ -172,10 +172,10 @@ function findActiveNeighbors2(position: Position2, state: State): number {
   const [x, y, z, w] = position;
   let active = 0;
 
-  for (let ix = x - 1; ix <= x + 1; ix++) {
-    for (let iy = y - 1; iy <= y + 1; iy++) {
-      for (let iz = z - 1; iz <= z + 1; iz++) {
-        for (let iw = w - 1; iw <= w + 1; iw++) {
+  for (let ix = x - 1; ix <= x + 1; ix += 1) {
+    for (let iy = y - 1; iy <= y + 1; iy += 1) {
+      for (let iz = z - 1; iz <= z + 1; iz += 1) {
+        for (let iw = w - 1; iw <= w + 1; iw += 1) {
           if (x === ix && y === iy && z === iz && w === iw) continue;
           active += Number(state[`${ix} ${iy} ${iz} ${iw}`] === '#');
         }

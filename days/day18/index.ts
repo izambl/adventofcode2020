@@ -58,7 +58,8 @@ function getExpressionOperators(expression: string, operators: Operators): strin
   const operatorsRegexp = new RegExp(`[${operatorSymbols}]`, 'g');
   const expressionOperators: string[] = expression.match(operatorsRegexp);
 
-  expressionOperators.sort((operatorA: string, operatorB: string) => operators[operatorA].order - operators[operatorB].order);
+  expressionOperators
+    .sort((operatorA: string, operatorB: string) => operators[operatorA].order - operators[operatorB].order);
 
   return expressionOperators;
 }

@@ -2,7 +2,10 @@ import { readInput } from '../../common';
 
 const input = readInput(`${__dirname}/input`);
 const bagsArray = input.map((bag: string): [string, string] => {
-  const rawBag: string[] = bag.replace(/bag,/g, 'bags,').replace(/bag\./g, 'bags.').replace(/\./g, '').split(' bags contain ');
+  const rawBag: string[] = bag.replace(/bag,/g, 'bags,')
+    .replace(/bag\./g, 'bags.')
+    .replace(/\./g, '')
+    .split(' bags contain ');
 
   return [rawBag[0], rawBag[1].replace(/ bags/g, '')];
 });
@@ -41,9 +44,9 @@ function childrenCounter(color: string, multiplier: number = 1) {
 
   if (!colorChildrens) return totalSum;
 
-  colorChildrens.forEach(([color, quantity]: [string, number]) => {
+  colorChildrens.forEach(([colorOfChildren, quantity]: [string, number]) => {
     totalSum += quantity * multiplier;
-    totalSum += childrenCounter(color, quantity) * multiplier;
+    totalSum += childrenCounter(colorOfChildren, quantity) * multiplier;
   });
 
   return totalSum;

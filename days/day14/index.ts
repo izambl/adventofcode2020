@@ -48,7 +48,7 @@ function part02(): number {
 function applyMask(value: number, mask: string): number {
   const binaryValue = `${'0'.repeat(36)}${value.toString(2)}`.slice(-36).split('');
 
-  for (let i = 0; i < mask.length; i++) {
+  for (let i = 0; i < mask.length; i += 1) {
     if (mask[i] === 'X') continue;
 
     binaryValue[i] = mask[i];
@@ -61,7 +61,7 @@ function applyMemoryMask(value: number, mask: string): string[] {
   const binaryValue = `${'0'.repeat(36)}${value.toString(2)}`.slice(-36).split('');
   let addresses = [''];
 
-  for (let i = 0; i < mask.length; i++) {
+  for (let i = 0; i < mask.length; i += 1) {
     switch (mask[i]) {
       case '0': addresses = addValueToAddresses(addresses, binaryValue[i]); break;
       case '1': addresses = addValueToAddresses(addresses, '1'); break;
@@ -82,8 +82,8 @@ function forkAddresses(addresses: string[]): string[] {
 function addValueToAddresses(addresses: string[], value: string): string[] {
   const addressesWithNewValue = [...addresses];
 
-  for (let i = 0; i < addressesWithNewValue.length; i++) {
-    addressesWithNewValue[i] = addressesWithNewValue[i] + value;
+  for (let i = 0; i < addressesWithNewValue.length; i += 1) {
+    addressesWithNewValue[i] += value;
   }
 
   return addressesWithNewValue;

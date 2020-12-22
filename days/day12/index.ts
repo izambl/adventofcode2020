@@ -3,7 +3,8 @@ import { readInput } from '../../common';
 type Instruction = [string, number];
 type Position = [number, number];
 
-const input: Instruction[] = readInput(`${__dirname}/input`).map((instruction: string) => [instruction.replace(/\d/g, ''), Number(instruction.replace(/[^\d]/g, ''))]);
+const input: Instruction[] = readInput(`${__dirname}/input`)
+  .map((instruction: string) => [instruction.replace(/\d/g, ''), Number(instruction.replace(/[^\d]/g, ''))]);
 
 function part01(): number {
   let position: Position = [0, 0];
@@ -47,12 +48,14 @@ function rotateWaypoint(direction: string, degrees: number, waypoint: Position):
   let turns = degrees / 90;
   let newWaypointPosition: Position = [...waypoint];
 
-  while (turns--) {
+  while (turns) {
     const [x, y] = newWaypointPosition;
 
     newWaypointPosition = direction === 'R'
       ? [y, -x]
       : [-y, x];
+
+    turns -= 1;
   }
 
   return newWaypointPosition;

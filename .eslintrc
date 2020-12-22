@@ -6,5 +6,24 @@
   "plugins": ["@typescript-eslint"],
   "extends": [
     "airbnb-typescript/base"
-  ]
+  ],
+  "rules": {
+    "@typescript-eslint/no-use-before-define": [
+      "error",
+      {
+        "functions": false,
+        "classes": false,
+        "variables": true,
+        "enums": true,
+        "typedefs": true,
+        "ignoreTypeReferences": false
+      }
+    ],
+    "no-bitwise": "off",
+    "max-len": ["error", { "code": 120 }],
+    "no-restricted-syntax": "off",
+    "no-continue": "off",
+    "no-prototype-builtins": "off",
+    "default-case": "off"
+  }
 }

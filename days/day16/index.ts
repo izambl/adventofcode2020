@@ -43,11 +43,12 @@ function part02(): number {
   fields.forEach(([fieldName, fieldRanges]: Field) => {
     if (!fieldsValidRows[fieldName]) fieldsValidRows[fieldName] = [];
 
-    for (let ticketField = 0; ticketField < myTicket.length; ticketField++) {
+    for (let ticketField = 0; ticketField < myTicket.length; ticketField += 1) {
       const validFieldFound = validTickets.every((ticket: Ticket) => {
         const ticketFieldValue = ticket[ticketField];
 
-        return fieldRanges.some(([lowerLimit, upperLimit]: Range) => ticketFieldValue >= lowerLimit && ticketFieldValue <= upperLimit);
+        return fieldRanges
+          .some(([lowerLimit, upperLimit]: Range) => ticketFieldValue >= lowerLimit && ticketFieldValue <= upperLimit);
       });
 
       if (validFieldFound) {
@@ -69,10 +70,11 @@ function part02(): number {
 
 function normalizePossibleRows(fieldsValidRows: FieldsPossibleRows): FieldsRows {
   const fieldsRows: FieldsRows = {};
-  const fieldPossibleRows = Object.keys(fieldsValidRows).reduce((newOb: any, key: string) => ({ ...newOb, [key]: [...fieldsValidRows[key]] }), {});
+  const fieldPossibleRows = Object.keys(fieldsValidRows)
+    .reduce((newOb: any, key: string) => ({ ...newOb, [key]: [...fieldsValidRows[key]] }), {});
 
-  let lonelyKey = null;
-  while (lonelyKey = Object.keys(fieldPossibleRows).find((key: string) => fieldPossibleRows[key].length === 1)) {
+  let lonelyKey = Object.keys(fieldPossibleRows).find((key: string) => fieldPossibleRows[key].length === 1);
+  while (lonelyKey) {
     const [lonelyKeyValue] = fieldPossibleRows[lonelyKey];
 
     fieldsRows[lonelyKey] = lonelyKeyValue;
@@ -83,13 +85,16 @@ function normalizePossibleRows(fieldsValidRows: FieldsPossibleRows): FieldsRows 
         fieldPossibleRows[key].splice(fieldPossibleRows[key].indexOf(lonelyKeyValue), 1);
       }
     });
+
+    lonelyKey = Object.keys(fieldPossibleRows).find((key: string) => fieldPossibleRows[key].length === 1);
   }
 
   return fieldsRows;
 }
 
 function validNumber(number: number): boolean {
-  return fields.some((field: Field): boolean => field[1].some(([lowerLimit, upperLimit]: Range) => number >= lowerLimit && number <= upperLimit));
+  return fields.some((field: Field): boolean => field[1]
+    .some(([lowerLimit, upperLimit]: Range) => number >= lowerLimit && number <= upperLimit));
 }
 
 process.stdout.write(`Part 1: ${part01()}\n`);

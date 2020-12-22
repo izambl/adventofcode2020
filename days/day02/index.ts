@@ -37,8 +37,8 @@ function isValid(letter: string, min: number, max: number, pass: string): boolea
 function countLetter(letter: string, pass: string): number {
   let count = 0;
 
-  for (let i = 0; i < pass.length; i++) {
-    if (pass[i] === letter) count++;
+  for (let i = 0; i < pass.length; i += 1) {
+    if (pass[i] === letter) count += 1;
   }
 
   return count;

@@ -6,7 +6,7 @@ const sortedInput = [0, ...input, Math.max(...input) + 3].sort((a: number, b: nu
 function part01(): number {
   const joltDifferences: { [index: number]: number } = {};
 
-  for (let i = 1; i < sortedInput.length; i++) {
+  for (let i = 1; i < sortedInput.length; i += 1) {
     const joltDifference = sortedInput[i] - sortedInput[i - 1];
 
     joltDifferences[joltDifference] = (joltDifferences[joltDifference] || 0) + 1;
@@ -18,8 +18,8 @@ function part01(): number {
 function getPossibleWays(device: number): number {
   let possibleWays = 1;
 
-  if (sortedInput[device + 2] - sortedInput[device] <= 3) possibleWays++;
-  if (sortedInput[device + 3] - sortedInput[device] <= 3) possibleWays++;
+  if (sortedInput[device + 2] - sortedInput[device] <= 3) possibleWays += 1;
+  if (sortedInput[device + 3] - sortedInput[device] <= 3) possibleWays += 1;
 
   return possibleWays;
 }
@@ -28,7 +28,7 @@ function part02(): number {
   const multipliers = [...Array(sortedInput.length)].map(() => 1); // times each device is in different paths
   let currentPaths = 1;
 
-  for (let device = 0; device < sortedInput.length; device++) {
+  for (let device = 0; device < sortedInput.length; device += 1) {
     const possibleWays = getPossibleWays(device);
 
     if (possibleWays === 1 || possibleWays === 0) continue;
@@ -39,7 +39,7 @@ function part02(): number {
       ? multipliers[device] * 2
       : multipliers[device];
 
-    for (let m = device + 3; m < multipliers.length; m++) {
+    for (let m = device + 3; m < multipliers.length; m += 1) {
       multipliers[m] = currentPaths;
     }
   }
@@ -54,7 +54,7 @@ function part02bf(): number {
   function walkDevices(combination: number[]) {
     totalWays += 1;
 
-    for (let i = 0; i < combination.length; i++) {
+    for (let i = 0; i < combination.length; i += 1) {
       if (combination[i + 2] && combination[i + 2] - combination[i] <= 3) walkDevices([...combination.slice(i + 2)]);
       if (combination[i + 3] && combination[i + 3] - combination[i] <= 3) walkDevices([...combination.slice(i + 3)]);
     }

@@ -18,8 +18,8 @@ function part02(): number {
   let totalSum = 0;
   let numberList = [];
 
-  for (let i = 0; i < input.length; i++) {
-    for (let j = i; j < input.length; j++) {
+  for (let i = 0; i < input.length; i += 1) {
+    for (let j = i; j < input.length; j += 1) {
       totalSum += input[j];
       numberList.push(input[j]);
 
@@ -38,8 +38,8 @@ function part02(): number {
 }
 
 function findNumbersThatSum(preambleList: number[], number: number) {
-  for (let i = 0; i < preambleList.length; i++) {
-    for (let j = i + 1; j < preambleList.length; j++) {
+  for (let i = 0; i < preambleList.length; i += 1) {
+    for (let j = i + 1; j < preambleList.length; j += 1) {
       if ((preambleList[i] + preambleList[j] === number) && (preambleList[i] !== preambleList[j])) {
         return true;
       }

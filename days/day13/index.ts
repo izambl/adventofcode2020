@@ -21,7 +21,8 @@ function part01(): number {
 }
 
 // Brute forced
-// @TODO check https://en.wikipedia.org/wiki/Polynomial_remainder_theorem and https://www.mathsisfun.com/algebra/polynomials-remainder-factor.html
+// @TODO check https://en.wikipedia.org/wiki/Polynomial_remainder_theorem
+// @TODO check https://www.mathsisfun.com/algebra/polynomials-remainder-factor.html
 // @TODO https://math.stackexchange.com/questions/149709/hcf-lcm-and-remainders
 // @TODO https://www.examrace.com/Study-Material/Aptitude/Quantitative-Reasoning/Solving-LCM-HCF-Remainder-Problems.html
 function part02(): number {
@@ -34,13 +35,13 @@ function part02(): number {
   let round = 0;
 
   while (!solutionFound) {
-    round++;
+    round += 1;
     roundSolved = true;
     t += maxBus;
 
-    if (round % 1000000000 === 0) console.log(`Test: ${t} -- ${process.memoryUsage().heapUsed}`);
+    if (round % 1000000000 === 0) process.stdout.write(`Test: ${t} -- ${process.memoryUsage().heapUsed}\n`);
 
-    for (busIndex = 0; busIndex < schedule2.length; busIndex++) {
+    for (busIndex = 0; busIndex < schedule2.length; busIndex += 1) {
       if (schedule2[busIndex] === 'x') continue;
 
       if ((t - (maxBusIndex - busIndex)) % Number(schedule2[busIndex]) !== 0) {

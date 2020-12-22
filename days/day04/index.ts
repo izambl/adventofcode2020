@@ -4,13 +4,15 @@ interface Passport { [index: string]: string }
 
 const input = readInput(`${__dirname}/input`, '\n\n');
 const passports = input.map((passport) => passport.replace(/\n/g, ' ').split(' '));
-const passportObjects: Passport[] = passports.map((passport) => passport.reduce((object: Passport, passportField: string): Passport => {
-  const [field, value] = passportField.split(':');
+const passportObjects: Passport[] = passports.map((passport) => passport.reduce(
+  (object: Passport, passportField: string): Passport => {
+    const [field, value] = passportField.split(':');
 
-  if (field === 'cid') return { ...object };
+    if (field === 'cid') return { ...object };
 
-  return { ...object, [field]: value };
-}, {}));
+    return { ...object, [field]: value };
+  }, {},
+));
 
 function part01() {
   return passportObjects.reduce((total: number, passportObject: Passport): number => {

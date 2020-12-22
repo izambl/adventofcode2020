@@ -1,4 +1,3 @@
-import { ENGINE_METHOD_EC } from 'constants';
 import { readInput } from '../../common';
 
 const input = readInput(`${__dirname}/input`);
@@ -35,14 +34,14 @@ function findRowAndColumn(boardingPass: string): [number, number] {
   const columnDirections = boardingPass.slice(-3);
 
   const row = findPlace(rowDirections);
-  const column = findPlace(columnDirections, 'L', 'R', [0, 7]);
+  const column = findPlace(columnDirections, 'L', [0, 7]);
 
   return [row, column];
 }
 
-function findPlace(instructions: string, lower: string = 'F', upper: string = 'B', range: [number, number] = [0, 127]): number {
-  const row = [...instructions].reduce((range: [number, number], half: string) => {
-    const [lowerHalf, upperHalf] = range;
+function findPlace(instructions: string, lower: string = 'F', range: [number, number] = [0, 127]): number {
+  const row = [...instructions].reduce((instructionRange: [number, number], half: string) => {
+    const [lowerHalf, upperHalf] = instructionRange;
     const distanceToShort = (upperHalf - lowerHalf + 1) / 2;
 
     if (half === lower) return [lowerHalf, upperHalf - distanceToShort];
