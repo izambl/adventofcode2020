@@ -24,6 +24,7 @@
     "no-restricted-syntax": "off",
     "no-continue": "off",
     "no-prototype-builtins": "off",
-    "default-case": "off"
+    "default-case": "off",
+    "no-param-reassign": "off"
   }
 }
