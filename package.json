@@ -27,7 +27,8 @@
     "day21": "ts-node ./days/day21/index",
     "day22": "ts-node ./days/day22/index",
     "day23": "ts-node ./days/day23/index",
-    "day24": "ts-node ./days/day24/index"
+    "day24": "ts-node ./days/day24/index",
+    "day25": "ts-node ./days/day25/index"
   },
   "author": "",
   "license": "ISC",
